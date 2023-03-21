@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ImageUpload</title>
+ <style>
+   
+   body {
+  margin: 0px;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+.center {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+.logo-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-input {
+  width: 350px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
+              3px 3px 7px rgba(94, 104, 121, 0.377);
+  margin-top: 20px;
+}
+.form-input input {
+  display: none;
+}
+.form-input label {
+  display: block;
+  width: 100%;
+  height: 45px;
+  line-height: 50px;
+  text-align: center;
+  background: #1172c2;
+  color: #fff;
+  font-size: 15px;
+  font-family: "Open Sans", sans-serif;
+  text-transform: Uppercase;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.form-input img {
+  width: 100%;
+  display: none;
+  margin-bottom: 30px;
+}
+.logo {
+  width: 50%;
+  max-width: 130px;
+  margin-bottom: 20px;
+}
+   
+  </style>
+
+</head>
+<body>
+ <div class="center">
+  <div class="logo-container">
+    <img class="logo" src="./AWS.png" alt="AWS Logo"> <!-- Replace with the actual AWS logo URL -->
+    <div class="form-input" style="margin-top: 20px;">
+      <div class="preview">
+        <img id="file-ip-1-preview">
+      </div>
+      <label for="file-ip-1">AWS IMAGE UPLOAD</label>
+      <input type="file" id="file-ip-1" accept="image/*" onchange="showPreview(event, 'file-ip-1-preview');">
+    </div>
+  </div>
+  <div class="logo-container">
+    <img class="logo" src="./GCP.png" alt="GCP Logo"> <!-- Replace with the actual GCP logo URL -->
+    <div class="form-input" style="margin-top: 20px;">
+      <div class="preview">
+        <img id="file-ip-2-preview">
+      </div>
+      <label for="file-ip-2">GCP IMAGE UPLOAD</label>
+      <input type="file" id="file-ip-2" accept="image/*" onchange="showPreview(event, 'file-ip-2-preview', 'GCP');">
+    </div>
+  </div>
+</div> 
+<script type="text/javascript">
+  async function showPreview(event, previewId, cloudProvider) {
+  if (event.target.files.length > 0) {
+    var file = event.target.files[0];
+    var src = URL.createObjectURL(file);
+    var preview = document.getElementById(previewId);
+    preview.src = src;
+    preview.style.display = "block";
+
+    // Upload the file to the Google Cloud Storage bucket
+    if (cloudProvider === "GCP") {
+      const bucketName = "license_plate_test_images";
+      const fileName = file.name;
+      await uploadImage(file, bucketName, fileName);
+    }
+  }
+}
+</script>
+
+<script>
+  var apiKey = "AIzaSyCUKQvZYT-06eT52QFdqAYlWDDj_SaAzrA";
+
+  async function uploadImage(file, bucketName, fileName) {
+  const url = `https://storage.googleapis.com/upload/storage/v1/b/${bucketName}/o?uploadType=media&name=${fileName}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": file.type,
+      "Authorization": `Bearer ${apiKey}`,
+    },
+    body: file,
+  });
+
+  if (response.ok) {
+    console.log("Image uploaded successfully");
+  } else {
+    console.error("Error uploading image:", response.statusText);
+  }
+}
+</script>
+
+</body>
+</html>
+
+  
