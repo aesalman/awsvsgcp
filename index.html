@@ -121,6 +121,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken, // Add the Authorization header with access token
           },
           body: JSON.stringify(data),
         });
