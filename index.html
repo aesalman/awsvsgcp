@@ -108,7 +108,6 @@
   </script>
 
   <script>
-    const accessToken = 'ya29.a0Ael9sCPgV1I2-z5G0C6PdsQZdDw9GBTt7E9ZqgM5bKxQIqVC8Fzqfr650vj7AlTN_8NSbiC1oaVe5VPN-G1S4Qdh2GzBGTkEJIxBbkTsKXnzOOhyCaOvM50O9WVi3cKh6P1Vai7GoUPUuCw8M4EL7L3rpe-UshuR7XCtnqx6_3aJjGX78yRnvQ0dvFSvlpUUArrkTY8VoEE2xdJ0yz_z4I4lKqKVJkCrKRrHOfwaCgYKAYYSARISFQF4udJhqhynWt98wl3O-zMF9JNw9Q0238'; // Replace with your actual access token
     async function sendImageDimensions(width, height) {
       const cloudFunctionUrl = 'https://us-central1-performance-evaluation-378600.cloudfunctions.net/log_image_dimensions';
       const data = {
@@ -121,7 +120,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken, // Add the Authorization header with access token
+            
           },
           body: JSON.stringify(data),
         });
