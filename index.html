@@ -11,6 +11,9 @@
   margin: 0px;
   height: 100vh;
   background-color: #f0f0f0;
+  background-image: url('cloud.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .center {
   height: 100%;
@@ -28,14 +31,14 @@
 .form-input {
   width: 350px;
   padding: 20px;
-  background: #fff;
-  box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
-              3px 3px 7px rgba(94, 104, 121, 0.377);
+  box-shadow: none; /* Remove the box-shadow from here */
   margin-top: 20px;
 }
+
 .form-input input {
   display: none;
 }
+
 .form-input label {
   display: block;
   width: 100%;
@@ -50,7 +53,10 @@
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
+  box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
+              3px 3px 7px rgba(94, 104, 121, 0.377); /* Add the box-shadow to the label */
 }
+
 .form-input img {
   width: 100%;
   display: none;
