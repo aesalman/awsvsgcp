@@ -74,73 +74,118 @@
 <body>
  <div class="center">
   <div class="logo-container">
-    <img class="logo" src="./AWS.png" alt="AWS Logo"> <!-- Replace with the actual AWS logo URL -->
-    <div class="form-input" style="margin-top: 20px;">
-      <div class="preview">
+    <img class="logo" src="./AWS.png" alt="AWS Logo">
+    <div class="form-input">
+      <div class="preview" id="file-ip-1-preview-container">
         <img id="file-ip-1-preview">
       </div>
       <label for="file-ip-1">AWS IMAGE UPLOAD</label>
       <input type="file" id="file-ip-1" accept="image/*" onchange="showPreview(event, 'file-ip-1-preview');">
+      <button class="upload-button" onclick="uploadImage('file-ip-1', 'file-ip-1-preview', 'cancel-button-1', 'success-message-1')">Upload</button>
+      <div class="cancel-button" id="cancel-button-1" onclick="cancelPreview('file-ip-1', 'file-ip-1-preview', 'cancel-button-1')">Cancel</div>
+      <div class="success-message" id="success-message-1">Image sent successfully</div>
     </div>
   </div>
   <div class="logo-container">
-    <img class="logo" src="./GCP.png" alt="GCP Logo"> <!-- Replace with the actual GCP logo URL -->
-    <div class="form-input" style="margin-top: 20px;">
-      <div class="preview">
+    <img class="logo" src="./GCP.png" alt="GCP Logo">
+    <div class="form-input">
+      <div class="preview" id="file-ip-2-preview-container">
         <img id="file-ip-2-preview">
       </div>
       <label for="file-ip-2">GCP IMAGE UPLOAD</label>
-      <input type="file" id="file-ip-2" accept="image/*" onchange="showPreview(event, 'file-ip-2-preview', 'GCP');">
+      <input type="file" id="file-ip-2" accept="image/*" onchange="showPreview(event, 'file-ip-2-preview');">
+      <button class="upload-button" onclick="uploadImage('file-ip-2', 'file-ip-2-preview', 'cancel-button-2', 'success-message-2')">Upload</button>
+      <div class="cancel-button" id="cancel-button-2" onclick="cancelPreview('file-ip-2', 'file-ip-2-preview', 'cancel-button-2')">Cancel</div>
+      <div class="success-message" id="success-message-2">Image sent successfully</div>
     </div>
   </div>
 </div> 
+
 <script type="text/javascript">
-    async function showPreview(event, previewId) {
-      if (event.target.files.length > 0) {
-        var file = event.target.files[0];
-        var src = URL.createObjectURL(file);
-        var preview = document.getElementById(previewId);
-        preview.src = src;
-        preview.style.display = "block";
+function showPreview(event, previewId) {
+  if (event.target.files.length > 0) {
+    var file = event.target.files[0];
+    var src = URL.createObjectURL(file);
+    var preview = document.getElementById(previewId);
+    preview.src = src;
+    preview.style.display = "block";
 
-        // Send the image dimensions to the Cloud Function
-        preview.onload = function() {
-          if (preview.naturalWidth && preview.naturalHeight) {
-            sendImageDimensions(preview.naturalWidth, preview.naturalHeight);
-          }
-        };
-      }
+    var previewContainerId = previewId.replace('preview', 'preview-container');
+    var previewContainer = document.getElementById(previewContainerId);
+    previewContainer.style.display = "block";
+
+    var cancelButtonId = previewId.replace('preview', 'cancel-button');
+    var cancelButton = document.getElementById(cancelButtonId);
+    if (cancelButton) { // Check if cancelButton exists before setting its style
+      cancelButton.style.display = "inline-block";
     }
+  }
+}
+  function cancelPreview(inputId, previewId, cancelButtonId) {
+    var input = document.getElementById(inputId);
+    input.value = '';
+
+    var preview = document.getElementById(previewId);
+    preview.style.display = "none";
+    preview.src = '';
+
+    var cancelButton = document.getElementById(cancelButtonId);
+    cancelButton.style.display = "none";
+  }
+
+  function uploadImage(inputId, previewId, cancelButtonId, successMessageId) {
+    // Your upload logic here
+
+    cancelPreview(inputId, previewId, cancelButtonId);
+
+    var successMessage = document.getElementById(successMessageId);
+    successMessage.style.display = "block";
+    setTimeout(function() {
+      successMessage.style.display = "none";
+    }, 3000);
+  }
   </script>
-
-  <script>
-    async function sendImageDimensions(width, height) {
-      const cloudFunctionUrl = 'https://us-central1-performance-evaluation-378600.cloudfunctions.net/log_image_dimensions';
-      const data = {
-        width: width,
-        height: height
-      };
-
-      try {
-        const response = await fetch(cloudFunctionUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          console.log('Image dimensions sent successfully');
-        } else {
-          console.error('Error sending image dimensions:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error sending image dimensions:', error);
-      }
+  <style>
+    /* Add your styles for the cancel button and success message here */
+    .cancel-button {
+      display: none;
+      background: #c21e1e;
+      color: #fff;
+      font-size: 15px;
+      font-family: "Open Sans", sans-serif;
+      text-transform: uppercase;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 10px 20px;
+      margin-top: 10px;
+      box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
+                  3px 3px 7px rgba(94, 104, 121, 0.377);
     }
-  </script>
 
+    .success-message {
+      display: none;
+      font-size: 15px;
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      color: #4caf50;
+      margin-top: 10px;
+    }
+
+    .upload-button {
+  background: #4caf50;
+  color: #fff;
+  font-size: 15px;
+  font-family: "Open Sans", sans-serif;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin-top: 10px;
+  box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
+              3px 3px 7px rgba(94, 104, 121, 0.377);
+}
+  </style>
 </body>
 </html>
